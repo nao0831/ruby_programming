@@ -1,1 +1,8 @@
 my programs of ruby
+binary.rb : 10進数を2進数に
+combination.rb : 組み合わせを列挙
+fizzbuzz.rb : fizzbuzz
+prime.rb : 素数判定
+puyo.rb : ぷよぷよの連鎖を起こす
+search_array.rb : 配列を配列で検索
+sudoku.br : 数独solver
