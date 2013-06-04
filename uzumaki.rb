@@ -39,28 +39,37 @@
 #     1  2     7   8   9  10     21  22  23  24  25  26
 #     3 -> 7      5 -> 15            7 -> 23
 #              22 - 9 + 3 - 1        44 - 25 + 5 - 1
-def below_number t
-  o = 99.step(0,-2){|s|break 1 if t==1;break s if ((s-2)**2+1..s**2)===t;s<2&&break}
-  t+(t==1? 3:
-#     99.step(0,-2){|s|
-#       break 1 if(s**2+1..s**2+s)===t
-#       break o**2+3-(o-2)**2 if(s**2+s+1..s**2+s+s+2)===t
-#       break -1 if(s**2-s+3-s..s**2-s+1)===t
-#       break -o**2+(o-2)**2+1 if s<2
-#     })
-    (99.step(0,-2).map{|s|
-      next (s**2+1..s**2+s)===t ?1:
-        (s**2+s+1..s**2+s+s+2)===t ?o**2+3-(o-2)**2:
-        (s**2-s+3-s..s**2-s+1)===t ?-1:
-        s<2 ?-o**2+(o-2)**2+1:0
-    }-[0]).first)
+#
+#   1->7 1->9
+#   2->5 2->7
+#   3->3 3->5
+#   4->1 4->3
+#   5->3 5->1
+#   6->5
+#   7->7
+def below_number(t, n, m,i)
+  o=i>n/2?2*i-n :n+2-2*i
+  t+(99.step(-1,-2).map{|s|
+      u=s**2
+      next(u+s<t&&t<u+s+s+3) ?4*o-1:
+        u<t&&t<=u+s ?1:
+        u-s-s+2<t&&t<u-s+2 ?-1:
+        s<1?5-4*o :0
+    }-[0])[0]
 end
 
 n=gets.to_i
-r=[(n**2-n+1..n**2).to_a]
+m=n**2
+r=[(m-n+1..m)]
 n.times{|i|
-  i!=0&&r<<r[i-1].map{|t|below_number t}
-  puts r[i].map{|w|sprintf "%##{(n**2).to_s.size}d",w}*" "
+  i!=0&&r<<r[i-1].map{|t|below_number t,n,m,i}
+  puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "
 }
 
+# (r=[(m-n+1..m)]).each_with_index{|q,i| 
+#   r<<q.map{|t|below_number t,n,m,i+1}
+#   puts q.map{|w|"%#{m.to_s.size}d"%w}*" "
+#   break if i>n+2
+# }
 
+# n=gets.to_i;m=n**2;r=[(m-n+1..m)];n.times{|i|i!=0&&r<<r[i-1].map{|t|o=i>n/2?2*i-n :n+2-2*i;t+(99.step(-1,-2).map{|s|u=s**2;next(u+s<t&&t<u+s+s+3) ?4*o-1:u<t&&t<=u+s ?1:u-s-s+2<t&&t<u-s+2 ?-1:s<1?5-4*o :0}-[0])[0]};puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "}
