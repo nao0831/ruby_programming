@@ -39,25 +39,28 @@
 #     1  2     7   8   9  10     21  22  23  24  25  26
 #     3 -> 7      5 -> 15            7 -> 23
 #              22 - 9 + 3 - 1        44 - 25 + 5 - 1
-N=99
 def below_number t
-  o = N.step(0,-2){|s|break 1 if t==1;break s if ((s-2)**2+1..s**2).include?(t);break if s<2}
+  o = 99.step(0,-2){|s|break 1 if t==1;break s if ((s-2)**2+1..s**2)===t;s<2&&break}
   t+(t==1? 3:
-    N.step(0,-2){|u|break 1 if((u**2)+1..(u**2)+u).include?(t);break if u<2} ? 1:
-    N.step(0,-2){|s|break 1 if((s**2)+s+1..s**2+s+s+2).include?(t);break if s<2} ? o**2+3-(o-2)**2:
-    N.step(0,-2){|s|break 1 if(s**2-s+3-s..s**2-s+1).include?(t);break if s<2} ? -1:
-    -o**2+(o-2)**2+1)
+#     99.step(0,-2){|s|
+#       break 1 if(s**2+1..s**2+s)===t
+#       break o**2+3-(o-2)**2 if(s**2+s+1..s**2+s+s+2)===t
+#       break -1 if(s**2-s+3-s..s**2-s+1)===t
+#       break -o**2+(o-2)**2+1 if s<2
+#     })
+    (99.step(0,-2).map{|s|
+      next (s**2+1..s**2+s)===t ?1:
+        (s**2+s+1..s**2+s+s+2)===t ?o**2+3-(o-2)**2:
+        (s**2-s+3-s..s**2-s+1)===t ?-1:
+        s<2 ?-o**2+(o-2)**2+1:0
+    }-[0]).first)
 end
 
 n=gets.to_i
-r=[(n**2 - n + 1..n**2).to_a]
-(n-1).times{|i|
-  r<<r[i].map{|t|
-    below_number t
-  }
+r=[(n**2-n+1..n**2).to_a]
+n.times{|i|
+  i!=0&&r<<r[i-1].map{|t|below_number t}
+  puts r[i].map{|w|sprintf "%##{(n**2).to_s.size}d",w}*" "
 }
-r.each{|v| 
-  puts v.map{|w|
-    sprintf "%##{(n**2).to_s.size}d",w
-  }*" "
-}
+
+
