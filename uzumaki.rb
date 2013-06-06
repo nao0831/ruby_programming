@@ -25,6 +25,46 @@
 # 39 18          12 29
 # 38 17 16 15 14 13 30
 # 37 36 35 34 33 32 31
+# 1. 右には一個大きい数字があるゾーン
+#   43 44 45 46 47 48 
+#      21 22 23 24 25
+#          7  8  9
+#             1
+# 2. 右には一個小さい数字があるゾーン
+#          5  4
+#      17 16 15 14
+#   37 36 35 34 33 32
+# 3. 右には一週回った小さい数字があるゾーン
+#   42
+#   41 20
+#   40 19 6
+#   39 18
+#   38
+# 4. 右には一週回った大きい数字があるゾーン
+#                 10
+#           1  2  11
+#              3  12
+#                 13
+# 4. 右には改行があって小さい数字があるゾーン
+#                   49
+#                   26
+#                   27
+#                   28
+#                   29
+#                   30
+#                   31
+n=gets.to_i
+(r=[n**2-n+1]).each{|i|
+  i!=n**2-3*(n-1)&&r<<i-1
+}
+puts r
+
+def right_number i,n,r
+  1.step(99,2).map{|s|
+    next n**2==i||(n-2)**2<i&&i<(n-2)**2+n+2
+    s**2-s<i&&i<=s**2 ?-1:
+  }
+end
 # 1. 下には+1の数字があるゾーン
 #     2,   10, 11, 12,   26, 27, 28, 29, 30
 # 2. 下には一週回った数字があるゾーン
@@ -47,24 +87,28 @@
 #   5->3 5->1
 #   6->5
 #   7->7
+
+
+
 def below_number(t, n, m,i)
   o=i>n/2?2*i-n :n+2-2*i
   t+(99.step(-1,-2).map{|s|
       u=s**2
-      next(u+s<t&&t<u+s+s+3) ?4*o-1:
+      next u+s<t&&t<u+s+s+3?4*o-1:
         u<t&&t<=u+s ?1:
-        u-s-s+2<t&&t<u-s+2 ?-1:
+        u-s-s+2<t&&t<u-s+2?-1:
         s<1?5-4*o :0
     }-[0])[0]
 end
 
-n=gets.to_i
-m=n**2
-r=[(m-n+1..m)]
-n.times{|i|
-  i!=0&&r<<r[i-1].map{|t|below_number t,n,m,i}
-  puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "
-}
+# n=gets.to_i
+# m=n**2
+# r=[m-n+1..m]
+# n.times{|i|
+#   i!=0&&r<<r[i-1].map{|t|below_number t,n,m,i}
+#   puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "
+#   puts (r<<r[i].map{|t|below_number t,n,m,i+1})[i].map{|w|"%#{m.to_s.size}d"%w}*" "
+# }
 
 # (r=[(m-n+1..m)]).each_with_index{|q,i| 
 #   r<<q.map{|t|below_number t,n,m,i+1}
@@ -72,4 +116,4 @@ n.times{|i|
 #   break if i>n+2
 # }
 
-# n=gets.to_i;m=n**2;r=[(m-n+1..m)];n.times{|i|i!=0&&r<<r[i-1].map{|t|o=i>n/2?2*i-n :n+2-2*i;t+(99.step(-1,-2).map{|s|u=s**2;next(u+s<t&&t<u+s+s+3) ?4*o-1:u<t&&t<=u+s ?1:u-s-s+2<t&&t<u-s+2 ?-1:s<1?5-4*o :0}-[0])[0]};puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "}
+# n=gets.to_i;m=n**2;r=[(m-n+1..m)];n.times{|i|i!=0&&r<<r[i-1].map{|t|o=i>n/2?2*i-n :n+2-2*i;t+(99.step(-1,-2).map{|s|u=s**2;next u+s<t&&t<u+s+s+3?4*o-1:u<t&&t<=u+s ?1:u-s-s+2<t&&t<u-s+2?-1:s<1?5-4*o :0}-[0])[0]};puts r[i].map{|w|"%#{m.to_s.size}d"%w}*" "}
